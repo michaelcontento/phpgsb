@@ -16,6 +16,7 @@ Installation
 Current ToDo-List
 -----------------
 
+* Upgrade to GSB verion 2
 * MAC validation
 * Canonicalized IP
 * Remove some slow regular expressions
