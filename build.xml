@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="PHP-Google-Safe-Browsing" default="build" basedir=".">
+
+    <property name="dir.build" value="./build" />
+    <property name="dir.library" value="./library" />
+    <property name="dir.tests" value="./tests" />
+    <property name="phpcs.ignore" value="./tests/configuration.php" />
+
+    <!-- =============================================== -->
+    <!-- = PHP_CodeSniffer                             = -->
+    <!-- =============================================== -->
+    <target name="phpcs" depends="clean">
+        <exec 
+            command="phpcs -n
+--report=checkstyle
+--standard=Zend
+--ignore=${phpcs.ignore}
+${dir.tests} ${dir.library}
+> ${dir.build}/checkstyle.xml"
+            checkreturn="true"
+        />
+    </target>
+
+    <target name="phpcs-cli">
+        <exec 
+            command="phpcs -n
+--report=full
+--standard=Zend
+--ignore=${phpcs.ignore}
+${dir.tests} ${dir.library}"
+            passthru="true"
+            checkreturn="true"
+        />
+    </target>
+    
+    <!-- =============================================== -->
+    <!-- = PHP_Depend                                  = -->
+    <!-- =============================================== -->
+    <target name="pdepend" depends="clean">
+        <exec 
+            command="pdepend 
+--without-annotations 
+--jdepend-xml='${dir.build}/jdepend.xml'
+--jdepend-chart='${dir.build}/jdepend.svg'  
+--overview-pyramid='${dir.build}/pyramid.svg'  
+${dir.library}"
+            checkreturn="true"
+        />
+    </target>
+
+    <!-- =============================================== -->
+    <!-- = phpmd                                       = -->
+    <!-- =============================================== -->
+    <target name="phpmd" depends="clean">
+        <exec 
+            command="phpmd ${dir.library} xml codesize --reportfile ${dir.build}/pmd-codesize.xml"
+            checkreturn="false"
+        />    
+        <exec 
+            command="phpmd ${dir.library} html codesize --reportfile ${dir.build}/pmd-codesize.html"
+            checkreturn="false"
+        />
+        <exec 
+            command="phpmd ${dir.library} xml unusedcode --reportfile ${dir.build}/pmd-unusedcode.xml"
+            checkreturn="false"
+        />        
+        <exec 
+            command="phpmd ${dir.library} html unusedcode --reportfile ${dir.build}/pmd-unusedcode.html"
+            checkreturn="false"
+        />        
+    </target>
+
+    <!-- =============================================== -->
+    <!-- = phploc                                      = -->
+    <!-- =============================================== -->
+    <target name="phploc" depends="clean">
+        <exec 
+            command="phploc --log-xml ${dir.build}/phploc.xml ${dir.tests} ${dir.library}"
+            checkreturn="true"
+        />
+    </target>
+
+    <!-- =============================================== -->
+    <!-- = phpcpd                                      = -->
+    <!-- =============================================== -->
+    <target name="phpcpd" depends="clean">
+        <exec 
+            command="phpcpd --log-pmd ${dir.build}/pmd-cpd.xml ${dir.tests} ${dir.library}"
+            checkreturn="true"
+        />
+    </target>
+
+    <!-- =============================================== -->
+    <!-- = sloccount                                   = -->
+    <!-- =============================================== -->
+    <target name="sloccount" depends="clean">
+        <exec
+            command="sloccount --duplicates --details --wide --addlangall ${dir.tests} ${dir.library} > ${dir.build}/sloccount.txt"
+            checkreturn="true"
+        />
+    </target>
+
+    <!-- =============================================== -->
+    <!-- = phpDocumentor                               = -->
+    <!-- =============================================== -->
+    <target name="phpdoc" depends="clean">
+        <phpdoc
+            title="PHP-Google-Safe-Browsing"
+            destdir="${dir.build}/docs/"
+            sourcecode="yes"
+            output="HTML:Smarty:PHP"
+            undocumentedelements="true"
+            quiet="true">
+            <fileset dir="${dir.library}">
+                <include name="**/*.php" />
+            </fileset>
+            <projdocfileset dir=".">
+                <include name="./docs/README" />
+                <include name="./docs/CHANGELOG" />
+                <include name="./docs/INSTALL" />
+            </projdocfileset>
+        </phpdoc>
+    </target>
+
+    <!-- =============================================== -->
+    <!-- = PHPUnit                                     = -->
+    <!-- =============================================== -->
+    <target name="phpunit" depends="clean">
+        <mkdir dir="${dir.build}/coverage" />
+        <exec 
+            command="phpunit
+--log-xml ${dir.build}/phpunit.xml
+--coverage-clover ${dir.build}/clover.xml
+--coverage-html ${dir.build}/coverage
+--bootstrap ${dir.tests}/bootstrap.php ${dir.tests}"
+            passthru="true"
+            checkreturn="true"
+        />
+    </target>
+
+    <!-- =============================================== -->
+    <!-- = PHPLint                                     = -->
+    <!-- =============================================== -->
+    <target name="phplint" depends="clean">
+        <phplint haltonfailure="true">
+            <fileset dir=".">
+                <include name="*.php" />
+                <include name="**/*.php" />
+            </fileset>
+        </phplint>
+    </target>
+
+    <!-- =============================================== -->
+    <!-- = Cleaning                                    = -->
+    <!-- =============================================== -->
+    <target name="clean">
+        <delete includeemptydirs="true" failonerror="false" quiet="true">
+            <fileset dir="${dir.build}/">
+                <include name="**/*" />
+            </fileset>
+        </delete>
+        <mkdir dir="${dir.build}" />
+    </target>
+
+    <!-- =============================================== -->
+    <!-- = Whole build for one target                  = -->
+    <!-- =============================================== -->
+    <target name="build" depends="clean,phplint,phpcpd,pdepend,phploc,phpcs,phpmd,sloccount,phpunit,phpdoc" />
+
+</project>

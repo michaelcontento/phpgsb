@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit  bootstrap="./bootstrap.php" colors="true" syntaxCheck="true">
+  <testsuite name="PHP-Google-Safe-Browsing">
+    <directory>./</directory>
+  </testsuite>
+</phpunit>
