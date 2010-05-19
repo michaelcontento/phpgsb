@@ -60,6 +60,10 @@ class Google_Safebrowsing_List
      */
     protected function _canonicalizePath($path)
     {
+    	if (empty($path)) {
+    		return '/';
+    	}
+
         // Remove some anchors from the url
         $path = preg_replace('/#.*$/i', '', $path);
 
@@ -122,12 +126,7 @@ class Google_Safebrowsing_List
         }
 
         // strip leading and trailing dots
-        if (substr($host, 0, 1) == '.') {
-            $host = substr($host, 1);
-        }
-        if (substr($host, strlen($host) - 1, 1) == '.') {
-            $host = substr($host, 0, -1);
-        }
+        $host = trim($host, ' .');
 
         return $host;
     }
@@ -151,6 +150,11 @@ class Google_Safebrowsing_List
      */
     protected function _canonicalizeUrl($url)
     {
+    	// Unescape all escaped characters
+    	while (preg_match('/%[0-9]{,2}/', $url)) {
+    		$url = urldecode($url);
+    	}
+
         // Remove the protocol-part!
         $url = preg_replace('#^http://#i', '', $url);
 
@@ -207,7 +211,7 @@ class Google_Safebrowsing_List
 
         // Split the hostname into components
         $hostComponents = array();
-        preg_match('/([^.]*\.?([^.]*\.?([^.]*\.?([^.]+\.[^.]+))))$/i', $host, $hostComponents);
+        preg_match('/([^.]*\.?([^.]*\.?([^.]*\.?([^.]*\.?([^.]+\.[^.]+)))))$/i', $host, $hostComponents);
         $hostComponents = array_unique($hostComponents);
         $hostComponents[0] = $host;
 
@@ -219,14 +223,14 @@ class Google_Safebrowsing_List
             unset($pathComponents[count($pathComponents)]);
 
             if (!empty($pathComponents)) {
-                $pathComponents = array_chunk($pathComponents, 4);
+                $pathComponents = array_chunk($pathComponents, 5);
                 $pathComponents = $pathComponents[0];
             }
         }
 
         // Build the hostname + path mixes we need to lookup
         foreach ($hostComponents as $host) {
-            $lookups[] = $host;
+            $lookups[] = $host . '/';
 
             if (!empty($path)) {
                 $lookups[] = $host . $path;

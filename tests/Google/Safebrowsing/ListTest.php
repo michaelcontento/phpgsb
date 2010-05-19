@@ -144,7 +144,7 @@ class Google_Safebrowsing_ListTest extends PHPUnit_Framework_TestCase
         $list = new Test_Google_Safebrowsing_List($this->_cache);
 
         $this->assertEquals('google.com/', $list->canonicalizeUrl('http://google.com/'));
-        $this->assertEquals('google.com/', $list->canonicalizeUrl('http://gOOgle.com/'));
+        $this->assertEquals('google.com/', $list->canonicalizeUrl('http://gOOgle.com'));
         $this->assertEquals('google.com/', $list->canonicalizeUrl('http://..google..com../'));
         $this->assertEquals('google.com/A%1F/', $list->canonicalizeUrl('http://google.com/%25%34%31%25%31%46'));
         $this->assertEquals('google%5E.com/', $list->canonicalizeUrl('http://google^.com/'));
@@ -162,13 +162,36 @@ class Google_Safebrowsing_ListTest extends PHPUnit_Framework_TestCase
     public function testIsListed()
     {
         $list = new Test_Google_Safebrowsing_List($this->_cache);
-        $list->add('08bcccbf12ae8d1b77cfdeb16daf5bd1');
+        $list->add('99cefcc1a924599f2648f09f82f5c09c');
         $this->assertTrue($list->isListed('http://97ai.com'));
     }
 
     public function testGetLookups()
     {
-        #$list = new Test_Google_Safebrowsing_List($this->_cache);
-        #print_r($list->getLookups('http://www.google.com/'));
+        $list = new Test_Google_Safebrowsing_List($this->_cache);
+
+        $expected = array(
+            'a.b.c/',
+            'a.b.c/1/2.html',
+            'a.b.c/1/',
+            'b.c/',
+            'b.c/1/2.html',
+            'b.c/1/'
+        );
+        $this->assertEquals($expected, $list->getLookups('http://a.b.c/1/2.html', true));
+
+        $expected = array(
+            'a.b.c.d.e.f.g/',
+            'a.b.c.d.e.f.g/1.html',
+            'c.d.e.f.g/',
+            'c.d.e.f.g/1.html',
+            'd.e.f.g/',
+            'd.e.f.g/1.html',
+            'e.f.g/',
+            'e.f.g/1.html',
+            'f.g/',
+            'f.g/1.html'
+        );
+        $this->assertEquals($expected, $list->getLookups('http://a.b.c.d.e.f.g/1.html', true));
     }
 }
