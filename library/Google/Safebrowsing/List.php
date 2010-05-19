@@ -139,7 +139,23 @@ class Google_Safebrowsing_List
      */
     protected function _canonicalizeIp($ip)
     {
-        return $ip;
+    	if (!preg_match('/^[0-9xX\.]+$/', $ip)) {
+    		return $ip;
+    	}
+
+    	$ipParts = explode('.', $ip);
+
+    	foreach ($ipParts as $idx => $part) {
+    		if (substr($part, 0, 2) == '0x' || substr($part, 0, 2) == '0X') {
+                $ipParts[$idx] = intval($part, 16);
+    		} else if (substr($part, 0, 1) == '0') {
+    			$ipParts[$idx] = intval($part, 8);
+    		} else {
+    			$ipParts[$idx] = intval($part, 10);
+    		}
+    	}
+
+        return implode('.', $ipParts);
     }
 
     /**

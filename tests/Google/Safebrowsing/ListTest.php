@@ -151,12 +151,8 @@ class Google_Safebrowsing_ListTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('google.com/2/', $list->canonicalizeUrl('http://google.com/1/../2/././'));
         $this->assertEquals('google.com/1/2?3//4', $list->canonicalizeUrl('http://google.com/1//2?3//4'));
         $this->assertEquals('1.2.3.4/', $list->canonicalizeUrl('1.2.3.4'));
-        #$this->assertEquals('10.28.1.45/', $list->canonicalizeUrl('012.034.01.055'));
-        #$this->assertEquals('18.67.68.1/', $list->canonicalizeUrl('0x12.0x43.0x44.0x01'));
-        #$this->assertEquals('10.1.2.3/', $list->canonicalizeUrl('167838211'));
-        #$this->assertEquals('12.18.2.156/', $list->canonicalizeUrl('12.0x12.01234'));
-        #$this->assertEquals('20.2.0.3/', $list->canonicalizeUrl('276.2.3'));
-        #$this->assertEquals('0.0.0.11/', $list->canonicalizeUrl('0x10000000b'));
+        $this->assertEquals('10.28.1.45/', $list->canonicalizeUrl('012.034.01.055'));
+        $this->assertEquals('18.67.68.1/', $list->canonicalizeUrl('0x12.0x43.0x44.0x01'));
     }
 
     public function testIsListed()

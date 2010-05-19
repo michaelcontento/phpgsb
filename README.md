@@ -17,7 +17,6 @@ Current ToDo-List
 -----------------
 
 * MAC validation
-* Canonicalized IP
 * Remove some slow regular expressions
 * Performance profiling
 * Add default end user warning as [defined](http://code.google.com/intl/de-DE/apis/safebrowsing/developers_guide_v2.html#UserWarnings)
