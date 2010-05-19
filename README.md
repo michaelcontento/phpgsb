@@ -48,6 +48,7 @@ Installation and usage
     if ($goog->isBlacklisted('[URL TO CHECK]')) {
         echo "URL is blacklisted!";
     }
+
     ?>
 
 Current ToDo-List
