@@ -21,6 +21,6 @@
  *
  * @author Michael Contento <michael.contento@gmail.com>
  */
-class Google_Exception extends Exception
+class Google2_Exception extends Exception
 {
 }

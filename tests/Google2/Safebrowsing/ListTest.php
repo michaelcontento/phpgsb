@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-class Test_Google_Safebrowsing_List extends Google_Safebrowsing_List
+class Test_Google2_Safebrowsing_List extends Google2_Safebrowsing_List
 {
     public function canonicalizePath($path)
     {
@@ -47,7 +47,7 @@ class Test_Google_Safebrowsing_List extends Google_Safebrowsing_List
 /**
  * @author Michael Contento <michael.contento@gmail.com>
  */
-class Google_Safebrowsing_ListTest extends PHPUnit_Framework_TestCase
+class Google2_Safebrowsing_ListTest extends PHPUnit_Framework_TestCase
 {
     private $_storagePath = '';
     private $_cache = null;
@@ -81,39 +81,39 @@ class Google_Safebrowsing_ListTest extends PHPUnit_Framework_TestCase
 
     public function testSetMinorNumber()
     {
-        $list = new Google_Safebrowsing_List($this->_cache);
+        $list = new Google2_Safebrowsing_List($this->_cache);
         $list->setMinor(123);
         unset($list);
-        $list = new Google_Safebrowsing_List($this->_cache);
+        $list = new Google2_Safebrowsing_List($this->_cache);
 
         $this->assertEquals(123, $list->getMinor());
     }
 
     public function testDefaultMinorNumber()
     {
-        $list = new Google_Safebrowsing_List($this->_cache);
+        $list = new Google2_Safebrowsing_List($this->_cache);
         $this->assertEquals(-1, $list->getMinor());
     }
 
     public function testDefaultMajorNumber()
     {
-        $list = new Google_Safebrowsing_List($this->_cache);
+        $list = new Google2_Safebrowsing_List($this->_cache);
         $this->assertEquals(1, $list->getMajor());
     }
 
     public function testSetMajorNumber()
     {
-        $list = new Google_Safebrowsing_List($this->_cache);
+        $list = new Google2_Safebrowsing_List($this->_cache);
         $list->setMajor(123);
         unset($list);
-        $list = new Google_Safebrowsing_List($this->_cache);
+        $list = new Google2_Safebrowsing_List($this->_cache);
 
         $this->assertEquals(123, $list->getMajor());
     }
 
     public function testAddHash()
     {
-        $list = new Google_Safebrowsing_List($this->_cache);
+        $list = new Google2_Safebrowsing_List($this->_cache);
 
         $list->add('myHash');
         $this->assertTrue($list->containsHash('myHash'));
@@ -122,7 +122,7 @@ class Google_Safebrowsing_ListTest extends PHPUnit_Framework_TestCase
 
     public function testClearList()
     {
-        $list = new Google_Safebrowsing_List($this->_cache);
+        $list = new Google2_Safebrowsing_List($this->_cache);
 
         $list->add('myHash');
         $list->clear();
@@ -131,7 +131,7 @@ class Google_Safebrowsing_ListTest extends PHPUnit_Framework_TestCase
 
     public function testRemoveHash()
     {
-        $list = new Google_Safebrowsing_List($this->_cache);
+        $list = new Google2_Safebrowsing_List($this->_cache);
 
         $list->add('myHash');
         $list->remove('myHash');
@@ -141,7 +141,7 @@ class Google_Safebrowsing_ListTest extends PHPUnit_Framework_TestCase
 
     public function testcanonicalizeUrl()
     {
-        $list = new Test_Google_Safebrowsing_List($this->_cache);
+        $list = new Test_Google2_Safebrowsing_List($this->_cache);
 
         $this->assertEquals('google.com/', $list->canonicalizeUrl('http://google.com/'));
         $this->assertEquals('google.com/', $list->canonicalizeUrl('http://gOOgle.com'));
@@ -157,14 +157,14 @@ class Google_Safebrowsing_ListTest extends PHPUnit_Framework_TestCase
 
     public function testIsListed()
     {
-        $list = new Test_Google_Safebrowsing_List($this->_cache);
+        $list = new Test_Google2_Safebrowsing_List($this->_cache);
         $list->add('99cefcc1a924599f2648f09f82f5c09c');
         $this->assertTrue($list->isListed('http://97ai.com'));
     }
 
     public function testGetLookups()
     {
-        $list = new Test_Google_Safebrowsing_List($this->_cache);
+        $list = new Test_Google2_Safebrowsing_List($this->_cache);
 
         $expected = array(
             'a.b.c/',

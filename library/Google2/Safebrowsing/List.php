@@ -17,12 +17,12 @@
  */
 
 /**
- * This class represents a list used for Google_Safebrowsing and
+ * This class represents a list used for Google2_Safebrowsing and
  * can store the malware- or blacklist.
  *
  * @author Michael Contento <michael.contento@gmail.com>
  */
-class Google_Safebrowsing_List
+class Google2_Safebrowsing_List
 {
     /**
      * Used instance of Zend_Cache
@@ -299,7 +299,7 @@ class Google_Safebrowsing_List
     /**
      * Writes the internal cache to Zend_Cache
      *
-     * @return Google_Safebrowsing_List
+     * @return Google2_Safebrowsing_List
      */
     private function _flushWriteCache()
     {
@@ -336,7 +336,7 @@ class Google_Safebrowsing_List
      * Constructor
      *
      * @param Zend_Cache_Core $cache
-     * @return Google_Safebrowsing_List
+     * @return Google2_Safebrowsing_List
      */
     public function __construct(Zend_Cache_Core $cache)
     {
@@ -355,7 +355,7 @@ class Google_Safebrowsing_List
     /**
      * Clears this list
      *
-     * @return Google_Safebrowsing_List
+     * @return Google2_Safebrowsing_List
      */
     public function clear()
     {
@@ -368,7 +368,7 @@ class Google_Safebrowsing_List
      * Update the major number
      *
      * @param int $version
-     * @return Google_Safebrowsing_List
+     * @return Google2_Safebrowsing_List
      */
     public function setMajor($version)
     {
@@ -395,7 +395,7 @@ class Google_Safebrowsing_List
      * Update the minor number
      *
      * @param int $version
-     * @return Google_Safebrowsing_List
+     * @return Google2_Safebrowsing_List
      */
     public function setMinor($version)
     {
@@ -422,7 +422,7 @@ class Google_Safebrowsing_List
      * Adds a new hash to this list
      *
      * @param string $hash
-     * @return Google_Safebrowsing_List
+     * @return Google2_Safebrowsing_List
      */
     public function add($hash)
     {
@@ -442,7 +442,7 @@ class Google_Safebrowsing_List
      * Removes a hash from this list
      *
      * @param string $hash
-     * @return Google_Safebrowsing_List
+     * @return Google2_Safebrowsing_List
      */
     public function remove($hash)
     {

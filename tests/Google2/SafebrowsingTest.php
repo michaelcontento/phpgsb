@@ -19,7 +19,7 @@
 /**
  * @author Michael Contento <michael.contento@gmail.com>
  */
-class Google_SafebrowsingTest extends PHPUnit_Framework_TestCase
+class Google2_SafebrowsingTest extends PHPUnit_Framework_TestCase
 {
     private $_blacklistPath = '';
     private $_blacklistCache = null;
@@ -83,10 +83,10 @@ class Google_SafebrowsingTest extends PHPUnit_Framework_TestCase
             . $body
         );
 
-        $api = new Google_Safebrowsing($this->_blacklistCache, $this->_malwareCache);
+        $api = new Google2_Safebrowsing($this->_blacklistCache, $this->_malwareCache);
         $api->setHttpClient($client);
 
-        $this->setExpectedException('Google_Exception');
+        $this->setExpectedException('Google2_Exception');
         $api->update('myApiKey', false);
     }
 
@@ -108,7 +108,7 @@ class Google_SafebrowsingTest extends PHPUnit_Framework_TestCase
             . $body
         );
 
-        $api = new Google_Safebrowsing($this->_blacklistCache, $this->_malwareCache);
+        $api = new Google2_Safebrowsing($this->_blacklistCache, $this->_malwareCache);
         $api->setHttpClient($client);
         $api->update('myApiKey', false);
 

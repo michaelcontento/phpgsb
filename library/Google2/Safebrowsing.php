@@ -22,7 +22,7 @@
  * @see http://code.google.com/apis/safebrowsing/
  * @author Michael Contento <michael.contento@gmail.com>
  */
-class Google_Safebrowsing
+class Google2_Safebrowsing
 {
     /**
      * Used http client
@@ -48,14 +48,14 @@ class Google_Safebrowsing
     /**
      * Contains the blacklist object
      *
-     * @var Google_Safebrowsing_List
+     * @var Google2_Safebrowsing_List
      */
     private $_blacklist = null;
 
     /**
      * Contains the malware list object
      *
-     * @var Google_Safebrowsing_List
+     * @var Google2_Safebrowsing_List
      */
     private $_malware = null;
 
@@ -101,7 +101,7 @@ class Google_Safebrowsing
      * an special "mac-value". With this mac an our private clientkey we
      * can validate the received data.
      *
-     * @return Google_Safebrowsing
+     * @return Google2_Safebrowsing
      */
     private function _initializeSecureConnection()
     {
@@ -110,20 +110,20 @@ class Google_Safebrowsing
 
         $request = $this->_httpClient->setUri(self::URL_GETKEY)->request();
         if (!$request->isSuccessful()) {
-            throw new Google_Exception('Error while reading from google!');
+            throw new Google2_Exception('Error while reading from google!');
         }
         $result = $request->getBody();
 
         if (!preg_match('/clientkey:(.*):(.*)\nwrappedkey:(.*):(.*)/', $result, $matches)) {
-            throw new Google_Exception('Invalid data received!');
+            throw new Google2_Exception('Invalid data received!');
         }
 
         if (strlen($matches[2]) != $matches[1]) {
-            throw new Google_Exception('Invalid data received');
+            throw new Google2_Exception('Invalid data received');
         }
 
         if (strlen($matches[4]) != $matches[3]) {
-            throw new Google_Exception('Invalid data received');
+            throw new Google2_Exception('Invalid data received');
         }
 
         $this->_clientKey = $matches[2];
@@ -157,7 +157,7 @@ class Google_Safebrowsing
                  . '/s';
 
         if (!preg_match_all($regex, $header, $matches, PREG_SET_ORDER)) {
-            throw new Google_Exception('Invalid data received');
+            throw new Google2_Exception('Invalid data received');
         }
 
         $return = array();
@@ -183,12 +183,12 @@ class Google_Safebrowsing
      *
      * @param Zend_Cache_Core $blacklistCache
      * @param Zend_Cache_Core $malwareCache
-     * @return Google_Safebrowsing
+     * @return Google2_Safebrowsing
      */
     public function __construct(Zend_Cache_Core $blacklistCache, Zend_Cache_Core $malwareCache)
     {
-        $this->_blacklist = new Google_Safebrowsing_List($blacklistCache);
-        $this->_malware = new Google_Safebrowsing_List($malwareCache);
+        $this->_blacklist = new Google2_Safebrowsing_List($blacklistCache);
+        $this->_malware = new Google2_Safebrowsing_List($malwareCache);
         $this->_httpClient = new Zend_Http_Client();
     }
 
@@ -197,7 +197,7 @@ class Google_Safebrowsing
      *
      * @param string $apiKey
      * @param bool $secureConnection
-     * @return Google_Safebrowsing
+     * @return Google2_Safebrowsing
      */
     public function update($apiKey, $secureConnection = true)
     {
@@ -229,7 +229,7 @@ class Google_Safebrowsing
         // And fetch the data!
         $request = $this->_httpClient->setUri($url)->request();
         if (!$request->isSuccessful()) {
-            throw new Google_Exception('Error while reading from google!');
+            throw new Google2_Exception('Error while reading from google!');
         }
 
         $result = $request->getBody();
@@ -309,7 +309,7 @@ class Google_Safebrowsing
     /**
      * Returns the used blacklist list
      *
-     * @return Google_Safebrowsing_List
+     * @return Google2_Safebrowsing_List
      */
     public function getBlacklist()
     {
@@ -319,7 +319,7 @@ class Google_Safebrowsing
     /**
      * Returns the used malware list
      *
-     * @return Google_Safebrowsing_List
+     * @return Google2_Safebrowsing_List
      */
     public function getMalware()
     {
@@ -330,7 +330,7 @@ class Google_Safebrowsing
      * Override the used http client for testing
      *
      * @param Zend_Http_Client $client
-     * @return Google_Safebrowsing
+     * @return Google2_Safebrowsing
      */
     public function setHttpClient(Zend_Http_Client $client)
     {
