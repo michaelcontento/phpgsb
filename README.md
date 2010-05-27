@@ -58,21 +58,6 @@ Current ToDo-List
 * "resolve and lookup" for IP adresses
 * Performance profiling and remove some slow regular expressions
 
-Flattr-Test
------------
-
-<script type="text/javascript">
-var flattr_uid = '13369';
-var flattr_tle = 'phpgsb - PHP Google Safebrowsing';
-var flattr_dsc = 'the entry description, please be as thorough as possible';
-var flattr_cat = 'category';
-var flattr_lng = 'language';
-var flattr_tag = 'tag1, tag2, tag3';
-var flattr_url = 'http://www.example.com';
-var flattr_btn = 'compact';
-</script>
-<script src="http://api.flattr.com/button/load.js" type="text/javascript"></script>
-
 License
 -------
 
