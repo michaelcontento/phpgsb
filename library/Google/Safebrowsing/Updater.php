@@ -16,6 +16,37 @@
  *  limitations under the License.
  */
 
-#define('TESTS_ZF_PATH', dirname(__FILE__) . '/../../zend-trunk/');
-define('TESTS_ZF_PATH', '/home/www/funfari_de_669/gflib/extern/');
-define('TESTS_TEMP_DIRECTORY', '/var/tmp/php-unittests/');
+/**
+ * @see http://code.google.com/apis/safebrowsing/
+ * @author Michael Contento <michael.contento@gmail.com>
+ */
+class Google_Safebrowsing_Updater
+{
+	/**
+	 * @var string
+	 */
+	private $_apiKey;
+
+	/**
+	 * @var Google_Safebrowsing_Backend_Interface
+	 */
+	private $_backend;
+
+	/**
+	 * @param string $apiKey
+	 * @param Google_Safebrowsing_Backend_Interface $backend
+	 */
+	public function __construct($apiKey, Google_Safebrowsing_Backend_Interface $backend)
+	{
+        $this->_apiKey = $apiKey;
+        $this->_backend = $backend;
+	}
+
+	/**
+	 * @return Google_Safebrowsing_Updater
+	 */
+	public function update()
+	{
+        return $this;
+	}
+}

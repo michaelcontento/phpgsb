@@ -16,6 +16,10 @@
  *  limitations under the License.
  */
 
-#define('TESTS_ZF_PATH', dirname(__FILE__) . '/../../zend-trunk/');
-define('TESTS_ZF_PATH', '/home/www/funfari_de_669/gflib/extern/');
-define('TESTS_TEMP_DIRECTORY', '/var/tmp/php-unittests/');
+/**
+ * @see http://code.google.com/apis/safebrowsing/
+ * @author Michael Contento <michael.contento@gmail.com>
+ */
+class Google_Exception extends Exception
+{
+}
