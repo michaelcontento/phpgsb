@@ -23,11 +23,13 @@ class Google_Safebrowsing_UrlTest extends PHPUnit_Framework_TestCase
 {
     public function testGoogleIpHostTests()
     {
+    	$this->markTestSkipped('ip normalization not implemented yet');
+
         $url = new Google_Safebrowsing_Url('http://3279880203/blah');
-        //$this->assertEquals('http://195.127.0.11/blah', $url->getCanonicalized());
+        $this->assertEquals('http://195.127.0.11/blah', $url->getCanonicalized());
 
         $url = new Google_Safebrowsing_Url('http://%31%36%38%2e%31%38%38%2e%39%39%2e%32%36/%2E%73%65%63%75%72%65/%77%77%77%2E%65%62%61%79%2E%63%6F%6D/');
-        //$this->assertEquals('http://168.188.99.26/.secure/www.ebay.com/', $url->getCanonicalized());
+        $this->assertEquals('http://168.188.99.26/.secure/www.ebay.com/', $url->getCanonicalized());
     }
 
 	public function testGoogleAlnumHostTests()

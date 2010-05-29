@@ -180,8 +180,6 @@ class Google_Safebrowsing_Url
      */
     private function _pathTrailingSlashes()
     {
-        //$this->_splittedUrl['path'] = rtrim($this->_splittedUrl['path'], '/');
-
         if (empty($this->_splittedUrl['path'])) {
         	$this->_splittedUrl['path'] = '/';
         }
