@@ -21,6 +21,52 @@
  */
 class Google_Safebrowsing_UrlTest extends PHPUnit_Framework_TestCase
 {
+    public function testPathComponentLookupsWithQuery()
+    {
+        $expects = array(
+            'host/1/2/3/4/5/6/?param=1',
+            'host/1/2/3/4/5/6/',
+            'host/3/4/5/6/?param=1',
+            'host/3/4/5/6/',
+            'host/4/5/6/?param=1',
+            'host/4/5/6/',
+            'host/5/6/?param=1',
+            'host/5/6/',
+            'host/6/?param=1',
+            'host/6/',
+            'host/'
+        );
+        $url = new Google_Safebrowsing_Url('host/1/2/3/4/5/6?param=1');
+        $this->assertEquals($expects, $url->getLookups());
+    }
+
+    public function testPathComponentLookups()
+    {
+        $expects = array(
+            'host/1/2/3/4/5/6/',
+            'host/3/4/5/6/',
+            'host/4/5/6/',
+            'host/5/6/',
+            'host/6/',
+            'host/'
+        );
+        $url = new Google_Safebrowsing_Url('host/1/2/3/4/5/6');
+        $this->assertEquals($expects, $url->getLookups());
+    }
+
+    public function testHostComponentLookups()
+    {
+        $expects = array(
+            'a.b.c.d.e.f.g/',
+            'c.d.e.f.g/',
+            'd.e.f.g/',
+            'e.f.g/',
+            'f.g/'
+        );
+        $url = new Google_Safebrowsing_Url('a.b.c.d.e.f.g');
+        $this->assertEquals($expects, $url->getLookups());
+    }
+
     public function testGoogleIpHostTests()
     {
         $this->markTestSkipped('ip normalization not implemented yet');

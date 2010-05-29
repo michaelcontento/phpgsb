@@ -281,4 +281,48 @@ class Google_Safebrowsing_Url
     {
           return $this->_canonicalizedUrl;
     }
+
+    /**
+     *
+     */
+    public function getLookups()
+    {
+        $hostComponents = array();
+        preg_match(
+            '#([^.]*\.?([^.]*\.?([^.]*\.?([^.]+\.[^.]+))))$#i',
+            $this->_splittedUrl['host'],
+            $hostComponents
+        );
+        $hostComponents[0] = $this->_splittedUrl['host'];
+
+        $pathComponents = array();
+        preg_match(
+            '#(/[^/]*(/[^/]*(/[^/]*(/[^/]*/[^/]*))))$#',
+            $this->_splittedUrl['path'],
+            $pathComponents
+        );
+        $pathComponents[0] = $this->_splittedUrl['path'];
+
+        $query = '';
+        if (isset($this->_splittedUrl['query'])) {
+            $query = '?' . $this->_splittedUrl['query'];
+        }
+
+        $lookups = array();
+        foreach ($hostComponents as $host) {
+            foreach ($pathComponents as $path) {
+                if (!empty($query)) {
+                    $lookups[] = $host . $path . $query;
+                }
+
+                if ($path != '/') {
+                    $lookups[] = $host . $path;
+                }
+            }
+
+            $lookups[] = $host . '/';
+        }
+
+        return $lookups;
+    }
 }
