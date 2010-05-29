@@ -37,6 +37,14 @@ class Google_Safebrowsing_Url
 	 */
 	private $_splittedUrl = array();
 
+    /**
+     * @return void
+     */
+    private function _removeLeadingAndTrailingSpaces()
+    {
+        $this->_canonicalizedUrl = trim($this->_canonicalizedUrl);
+    }
+
 	/**
 	 * @return void
 	 */
@@ -57,8 +65,12 @@ class Google_Safebrowsing_Url
     private function _repeatedlyDecode()
     {
     	do {
-    		$oldUrl = $this->_canonicalizedUrl;
-            $this->_canonicalizedUrl = urldecode($oldUrl);
+	        $oldUrl = preg_replace(
+	            '#(.*)\\\x([0-9]{2,2})(.*)#iU',
+	            '\1%\2\3',
+	            $this->_canonicalizedUrl
+	        );
+	        $this->_canonicalizedUrl = urldecode($oldUrl);
     	} while ($oldUrl != $this->_canonicalizedUrl);
     }
 
@@ -72,18 +84,6 @@ class Google_Safebrowsing_Url
             $this->_canonicalizedUrl = substr($this->_canonicalizedUrl, 0, $fragmentPos);
     	}
     }
-
-	/**
-	 * @return void
-	 */
-	private function _addTrailingSlash()
-	{
-        if (strpos($this->_canonicalizedUrl, '?') === false
-        && substr($this->_canonicalizedUrl, -1) != '?'
-        && substr($this->_canonicalizedUrl, -1) != '/') {
-            $this->_canonicalizedUrl .= '/';
-        }
-	}
 
     /**
      * @return void
@@ -109,6 +109,10 @@ class Google_Safebrowsing_Url
         	$this->_splittedUrl['query'] = '';
         }
 
+        if (!isset($this->_splittedUrl['path'])) {
+        	$this->_splittedUrl['path'] = '/';
+        }
+
         if (empty($this->_splittedUrl['host'])) {
         	$this->_splittedUrl['host'] = rtrim($this->_splittedUrl['path'], '/');
         	$this->_splittedUrl['path'] = '/';
@@ -122,7 +126,7 @@ class Google_Safebrowsing_Url
      */
     private function _hostRemoveLeadingAndTrailingDots()
     {
-        $this->_splittedUrl['host'] = trim($this->_splittedUrl['host'], ' .');
+        $this->_splittedUrl['host'] = trim($this->_splittedUrl['host'], '.');
     }
 
     /**
@@ -153,8 +157,8 @@ class Google_Safebrowsing_Url
 
     	// removing "/../" along with the preceding path component
         $this->_splittedUrl['path'] = preg_replace(
-            '#(.*)/([^/]+)/\.\./(.*)#i',
-            '\1/\3',
+            '#(.*)/([^/]+)/\.\.(/|)(.*)#i',
+            '\1/\4',
             $this->_splittedUrl['path']
         );
 
@@ -178,7 +182,7 @@ class Google_Safebrowsing_Url
      */
     private function _pathTrailingSlashes()
     {
-        $this->_splittedUrl['path'] = rtrim($this->_splittedUrl['path'], '/');
+        //$this->_splittedUrl['path'] = rtrim($this->_splittedUrl['path'], '/');
 
         if (empty($this->_splittedUrl['path'])) {
         	$this->_splittedUrl['path'] = '/';
@@ -191,31 +195,30 @@ class Google_Safebrowsing_Url
     private function _mergeUrlParts()
     {
     	$userAndPass = '';
-
     	if (!empty($this->_splittedUrl['user'])) {
     		$userAndPass .= $this->_splittedUrl['user'];
     	}
-
         if (!empty($this->_splittedUrl['pass'])) {
             $userAndPass .= ':' . $this->_splittedUrl['pass'];
         }
-
         if (!empty($userAndPass)) {
             $userAndPass .= '@';
+        }
+
+        $port = '';
+        if (!empty($this->_splittedUrl['port'])) {
+            $port .= ':' . $this->_splittedUrl['port'];
         }
 
     	$this->_canonicalizedUrl = $this->_splittedUrl['scheme']
     	                         . '://'
                                  . $userAndPass
                                  . $this->_splittedUrl['host']
+                                 . $port
                                  . $this->_splittedUrl['path'];
 
         if (isset($this->_splittedUrl['query'])) {
             $this->_canonicalizedUrl .= '?' . $this->_splittedUrl['query'];
-        }
-
-        if (isset($this->_splittedUrl['fragment'])) {
-            $this->_canonicalizedUrl .= '#' . $this->_splittedUrl['fragment'];
         }
     }
 
@@ -227,8 +230,8 @@ class Google_Safebrowsing_Url
     	foreach (array_keys($this->_splittedUrl) as $key) {
 	        $this->_splittedUrl[$key] = urlencode($this->_splittedUrl[$key]);
 	        $this->_splittedUrl[$key] = str_replace(
-	            array('%3A', '%2F', '%3F', '%3B'),
-	            array(':', '/', '?', ';'),
+	            array('%3A', '%2F', '%3F', '%3B', '+', '%3D'),
+	            array(':', '/', '?', ';', '%20', '='),
 	            $this->_splittedUrl[$key]
 	        );
     	}
@@ -244,14 +247,12 @@ class Google_Safebrowsing_Url
         echo "original: $this->_canonicalizedUrl\n";
 
         // Global
+        $this->_removeLeadingAndTrailingSpaces();
+        echo "_removeLeadingAndTrailingSpaces: $this->_canonicalizedUrl\n";
         $this->_removeTabCrAndLf();
         echo "_removeTabCrAndLf: $this->_canonicalizedUrl\n";
         $this->_repeatedlyDecode();
         echo "_repeatedlyDecode: $this->_canonicalizedUrl\n";
-        $this->_removeFragment();
-        echo "_removeFragment: $this->_canonicalizedUrl\n";
-        $this->_addTrailingSlash();
-        echo "_addTrailingSlash: $this->_canonicalizedUrl\n";
         $this->_lowercase();
         echo "_lowercase: $this->_canonicalizedUrl\n";
 
