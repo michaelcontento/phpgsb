@@ -23,7 +23,34 @@
 interface Google_Safebrowsing_Backend_Interface
 {
     /**
+     * @var int
+     */
+    const HASH_TTL_IN_SEC = 2700;
+
+    /**
      * @return int
      */
     public function getLastUpdate();
+
+    /**
+     * @param int $chunknum
+     * @param string $hostkey
+     * @param string $hash
+     * @return void
+     */
+    public function add($chunknum, $hostkey, $hash);
+
+    /**
+     * @param int $chunknum
+     * @param string|null $hostkey
+     * @param string|null $hash
+     * @return void
+     */
+    public function remove($chunknum, $hostkey = null, $hash = null);
+
+    /**
+     * @param string $hash
+     * @return bool
+     */
+    public function contains($hash);
 }

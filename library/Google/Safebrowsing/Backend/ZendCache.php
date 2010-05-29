@@ -22,4 +22,79 @@
  */
 class Google_Safebrowsing_Backend_ZendCache implements Google_Safebrowsing_Backend_Interface
 {
+    /**
+     * @var string
+     */
+    const LAST_UPDATE_CACHE_KEY = '__lastUpdate__';
+
+    /**
+     * @var Zend_Cache_Core
+     */
+    private $_cache;
+
+    /**
+     * @param Zend_Cache_Core $cache
+     */
+    public function __construct(Zend_Cache_Core $cache)
+    {
+        $this->_cache = $cache;
+        $this->_cache->setLifetime(self::HASH_TTL_IN_SEC);
+    }
+
+    /**
+     * @return int
+     */
+    public function getLastUpdate()
+    {
+        return (int) $this->_cache->load(self::LAST_UPDATE_CACHE_KEY);
+    }
+
+    /**
+     * @param int $time
+     */
+    public function setLastUpdate($time)
+    {
+        $this->_cache->save($time, self::LAST_UPDATE_CACHE_KEY);
+    }
+
+    /**
+     * @param int $chunknum
+     * @param string $hostkey
+     * @param string $hash
+     * @return void
+     */
+    public function add($chunknum, $hostkey, $hash)
+    {
+        $this->_cache->save(true, $hash, array((string) $chunknum, $hostkey));
+    }
+
+    /**
+     * @param int $chunknum
+     * @param string|null $hostkey
+     * @param string|null $hash
+     * @return void
+     */
+    public function remove($chunknum, $hostkey = null, $hash = null)
+    {
+        if ($hash !== null) {
+            $this->_cache->remove($hash);
+            return;
+        }
+
+        if ($hostkey === null) {
+            $tags = array((string) $chunknum);
+        } else {
+            $tags = array((string) $chunknum, $hostkey);
+        }
+        $this->_cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, $tags);
+    }
+
+    /**
+     * @param string $hash
+     * @return bool
+     */
+    public function contains($hash)
+    {
+        return (bool) $this->_cache->load($hash);
+    }
 }
