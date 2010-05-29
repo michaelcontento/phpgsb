@@ -22,31 +22,31 @@
  */
 class Google_Safebrowsing_Updater
 {
-	/**
-	 * @var string
-	 */
-	private $_apiKey;
+    /**
+     * @var string
+     */
+    private $_apiKey;
 
-	/**
-	 * @var Google_Safebrowsing_Backend_Interface
-	 */
-	private $_backend;
+    /**
+     * @var Google_Safebrowsing_Backend_Interface
+     */
+    private $_backend;
 
-	/**
-	 * @param string $apiKey
-	 * @param Google_Safebrowsing_Backend_Interface $backend
-	 */
-	public function __construct($apiKey, Google_Safebrowsing_Backend_Interface $backend)
-	{
+    /**
+     * @param string $apiKey
+     * @param Google_Safebrowsing_Backend_Interface $backend
+     */
+    public function __construct($apiKey, Google_Safebrowsing_Backend_Interface $backend)
+    {
         $this->_apiKey = $apiKey;
         $this->_backend = $backend;
-	}
+    }
 
-	/**
-	 * @return Google_Safebrowsing_Updater
-	 */
-	public function update()
-	{
+    /**
+     * @return Google_Safebrowsing_Updater
+     */
+    public function update()
+    {
         return $this;
-	}
+    }
 }

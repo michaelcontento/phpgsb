@@ -21,18 +21,18 @@
  */
 class Google_Safebrowsing_ApiTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @var Zend_Http_Client_Adapter_Test
-	 */
-	private $_httpAdapter;
+    /**
+     * @var Zend_Http_Client_Adapter_Test
+     */
+    private $_httpAdapter;
 
-	/**
+    /**
      * @var Google_Safebrowsing_Api
-	 */
-	private $_api;
+     */
+    private $_api;
 
-	public function setUp()
-	{
+    public function setUp()
+    {
         $this->_httpAdapter = new Zend_Http_Client_Adapter_Test();
 
         $client = new Zend_Http_Client();
@@ -40,16 +40,16 @@ class Google_Safebrowsing_ApiTest extends PHPUnit_Framework_TestCase
 
         $this->_api = new Google_Safebrowsing_Api('[APIKEY]');
         $this->_api->setHttpClient($client);
-	}
+    }
 
     public function testGetLists()
     {
-    	$expected = "list1\nlist2\nlist3";
-    	$this->_httpAdapter->setResponse(
+        $expected = "list1\nlist2\nlist3";
+        $this->_httpAdapter->setResponse(
             "HTTP/1.1 200 OK\r\n"
             . "\r\n"
             . $expected
-    	);
-    	$this->assertEquals($expected, $this->_api->getLists());
+        );
+        $this->assertEquals($expected, $this->_api->getLists());
     }
 }

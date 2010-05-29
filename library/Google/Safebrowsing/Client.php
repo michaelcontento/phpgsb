@@ -30,16 +30,16 @@ class Google_Safebrowsing_Client
     /**
      * @param Google_Safebrowsing_Backend_Interface $backend
      */
-	public function __construct(Google_Safebrowsing_Backend_Interface $backend)
-	{
-		$this->_backend = $backend;
-	}
+    public function __construct(Google_Safebrowsing_Backend_Interface $backend)
+    {
+        $this->_backend = $backend;
+    }
 
-	/**
-	 * @return Google_Safebrowsing_Backend_Interface
-	 */
-	public function getBackend()
-	{
-		return $this->_backend;
-	}
+    /**
+     * @return Google_Safebrowsing_Backend_Interface
+     */
+    public function getBackend()
+    {
+        return $this->_backend;
+    }
 }

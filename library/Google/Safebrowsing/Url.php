@@ -22,20 +22,20 @@
  */
 class Google_Safebrowsing_Url
 {
-	/**
-	 * @var string
-	 */
-	private $_orginUrl;
+    /**
+     * @var string
+     */
+    private $_orginUrl;
 
-	/**
-	 * @var string
-	 */
-	private $_canonicalizedUrl;
+    /**
+     * @var string
+     */
+    private $_canonicalizedUrl;
 
-	/**
-	 * @var array
-	 */
-	private $_splittedUrl = array();
+    /**
+     * @var array
+     */
+    private $_splittedUrl = array();
 
     /**
      * @return void
@@ -45,11 +45,11 @@ class Google_Safebrowsing_Url
         $this->_canonicalizedUrl = trim($this->_canonicalizedUrl);
     }
 
-	/**
-	 * @return void
-	 */
-	private function _removeTabCrAndLf()
-	{
+    /**
+     * @return void
+     */
+    private function _removeTabCrAndLf()
+    {
         $this->_canonicalizedUrl = str_replace(
             array(
                 "\t", "\n", "\r", '\t', '\n', '\r'
@@ -57,21 +57,21 @@ class Google_Safebrowsing_Url
             '',
             $this->_canonicalizedUrl
         );
-	}
+    }
 
     /**
      * @return void
      */
     private function _repeatedlyDecode()
     {
-    	do {
-	        $oldUrl = preg_replace(
-	            '#(.*)\\\x([0-9]{2,2})(.*)#iU',
-	            '\1%\2\3',
-	            $this->_canonicalizedUrl
-	        );
-	        $this->_canonicalizedUrl = urldecode($oldUrl);
-    	} while ($oldUrl != $this->_canonicalizedUrl);
+        do {
+            $oldUrl = preg_replace(
+                '#(.*)\\\x([0-9]{2,2})(.*)#iU',
+                '\1%\2\3',
+                $this->_canonicalizedUrl
+            );
+            $this->_canonicalizedUrl = urldecode($oldUrl);
+        } while ($oldUrl != $this->_canonicalizedUrl);
     }
 
     /**
@@ -79,10 +79,10 @@ class Google_Safebrowsing_Url
      */
     private function _removeFragment()
     {
-    	$fragmentPos = strpos($this->_canonicalizedUrl, '#');
-    	if ($fragmentPos !== false) {
+        $fragmentPos = strpos($this->_canonicalizedUrl, '#');
+        if ($fragmentPos !== false) {
             $this->_canonicalizedUrl = substr($this->_canonicalizedUrl, 0, $fragmentPos);
-    	}
+        }
     }
 
     /**
@@ -101,21 +101,21 @@ class Google_Safebrowsing_Url
         $this->_splittedUrl = parse_url($this->_canonicalizedUrl);
 
         if (empty($this->_splittedUrl['scheme'])) {
-        	$this->_splittedUrl['scheme'] = 'http';
+            $this->_splittedUrl['scheme'] = 'http';
         }
 
         if (!isset($this->_splittedUrl['query'])
         && substr($this->_canonicalizedUrl, -1) == '?') {
-        	$this->_splittedUrl['query'] = '';
+            $this->_splittedUrl['query'] = '';
         }
 
         if (!isset($this->_splittedUrl['path'])) {
-        	$this->_splittedUrl['path'] = '/';
+            $this->_splittedUrl['path'] = '/';
         }
 
         if (empty($this->_splittedUrl['host'])) {
-        	$this->_splittedUrl['host'] = rtrim($this->_splittedUrl['path'], '/');
-        	$this->_splittedUrl['path'] = '/';
+            $this->_splittedUrl['host'] = rtrim($this->_splittedUrl['path'], '/');
+            $this->_splittedUrl['path'] = '/';
         }
     }
 
@@ -132,10 +132,10 @@ class Google_Safebrowsing_Url
      */
     private function _hostReplaceConsecutiveDots()
     {
-    	do {
-    		$oldHost = $this->_splittedUrl['host'];
+        do {
+            $oldHost = $this->_splittedUrl['host'];
             $this->_splittedUrl['host'] = str_replace('..', '.', $oldHost);
-    	} while ($oldHost != $this->_splittedUrl['host']);
+        } while ($oldHost != $this->_splittedUrl['host']);
     }
 
     /**
@@ -151,9 +151,9 @@ class Google_Safebrowsing_Url
      */
     private function _pathNormalizeDotPaths()
     {
-    	$this->_splittedUrl['path'] = str_replace('/./', '/', $this->_splittedUrl['path']);
+        $this->_splittedUrl['path'] = str_replace('/./', '/', $this->_splittedUrl['path']);
 
-    	// removing "/../" along with the preceding path component
+        // removing "/../" along with the preceding path component
         $this->_splittedUrl['path'] = preg_replace(
             '#(.*)/([^/]+)/\.\.(/|)(.*)#i',
             '\1/\4',
@@ -181,7 +181,7 @@ class Google_Safebrowsing_Url
     private function _pathTrailingSlashes()
     {
         if (empty($this->_splittedUrl['path'])) {
-        	$this->_splittedUrl['path'] = '/';
+            $this->_splittedUrl['path'] = '/';
         }
     }
 
@@ -190,10 +190,10 @@ class Google_Safebrowsing_Url
      */
     private function _mergeUrlParts()
     {
-    	$userAndPass = '';
-    	if (!empty($this->_splittedUrl['user'])) {
-    		$userAndPass .= $this->_splittedUrl['user'];
-    	}
+        $userAndPass = '';
+        if (!empty($this->_splittedUrl['user'])) {
+            $userAndPass .= $this->_splittedUrl['user'];
+        }
         if (!empty($this->_splittedUrl['pass'])) {
             $userAndPass .= ':' . $this->_splittedUrl['pass'];
         }
@@ -206,8 +206,8 @@ class Google_Safebrowsing_Url
             $port .= ':' . $this->_splittedUrl['port'];
         }
 
-    	$this->_canonicalizedUrl = $this->_splittedUrl['scheme']
-    	                         . '://'
+        $this->_canonicalizedUrl = $this->_splittedUrl['scheme']
+                                 . '://'
                                  . $userAndPass
                                  . $this->_splittedUrl['host']
                                  . $port
@@ -223,22 +223,22 @@ class Google_Safebrowsing_Url
      */
     private function _percentEscape()
     {
-    	foreach (array_keys($this->_splittedUrl) as $key) {
-	        $this->_splittedUrl[$key] = urlencode($this->_splittedUrl[$key]);
-	        $this->_splittedUrl[$key] = str_replace(
-	            array('%3A', '%2F', '%3F', '%3B', '+', '%3D'),
-	            array(':', '/', '?', ';', '%20', '='),
-	            $this->_splittedUrl[$key]
-	        );
-    	}
+        foreach (array_keys($this->_splittedUrl) as $key) {
+            $this->_splittedUrl[$key] = urlencode($this->_splittedUrl[$key]);
+            $this->_splittedUrl[$key] = str_replace(
+                array('%3A', '%2F', '%3F', '%3B', '+', '%3D'),
+                array(':', '/', '?', ';', '%20', '='),
+                $this->_splittedUrl[$key]
+            );
+        }
     }
 
-	/**
-	 * @return void
-	 */
-	private function _parse()
-	{
-		$this->_canonicalizedUrl = $this->_orginUrl;
+    /**
+     * @return void
+     */
+    private function _parse()
+    {
+        $this->_canonicalizedUrl = $this->_orginUrl;
 
         // Global
         $this->_removeLeadingAndTrailingSpaces();
@@ -263,15 +263,15 @@ class Google_Safebrowsing_Url
         $this->_percentEscape();
         $this->_mergeUrlParts();
         $this->_splitUrlIntoParts();
-	}
+    }
 
-	/**
-	 * @param string $url
-	 */
+    /**
+     * @param string $url
+     */
     public function __construct($url)
     {
-    	$this->_orginUrl = $url;
-    	$this->_parse();
+        $this->_orginUrl = $url;
+        $this->_parse();
     }
 
     /**
@@ -279,6 +279,6 @@ class Google_Safebrowsing_Url
      */
     public function getCanonicalized()
     {
-  		return $this->_canonicalizedUrl;
+          return $this->_canonicalizedUrl;
     }
 }

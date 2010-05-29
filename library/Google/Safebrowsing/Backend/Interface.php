@@ -20,10 +20,10 @@
  * @see http://code.google.com/apis/safebrowsing/
  * @author Michael Contento <michael.contento@gmail.com>
  */
-class Google_Safebrowsing_Backend_Interface
+interface Google_Safebrowsing_Backend_Interface
 {
-	/**
-	 * @return int
-	 */
-	public function getLastUpdate();
+    /**
+     * @return int
+     */
+    public function getLastUpdate();
 }

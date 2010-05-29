@@ -22,109 +22,109 @@
  */
 class Google_Safebrowsing_Api
 {
-	/**
-	 * @var string
-	 */
-	const CLIENT_VERSION = '2.0';
+    /**
+     * @var string
+     */
+    const CLIENT_VERSION = '2.0';
 
-	/**
-	 * @var string
-	 */
-	const PROTOCOL_VERSION = '2.2';
+    /**
+     * @var string
+     */
+    const PROTOCOL_VERSION = '2.2';
 
-	/**
-	 * @var string
-	 */
-	const BASE_URL = 'http://safebrowsing.clients.google.com/safebrowsing/';
+    /**
+     * @var string
+     */
+    const BASE_URL = 'http://safebrowsing.clients.google.com/safebrowsing/';
 
-	/**
-	 * @var string
-	 */
-	private $_apiKey;
+    /**
+     * @var string
+     */
+    private $_apiKey;
 
-	/**
-	 * @var Zend_Http_Client
-	 */
-	private $_httpClient;
+    /**
+     * @var Zend_Http_Client
+     */
+    private $_httpClient;
 
-	/**
-	 * @param string $method
-	 * @param array $params
-	 * @return string
-	 */
-	private function _createUrl($method, array $params = array())
-	{
-		$params['client'] = 'api';
-		$params['apikey'] = $this->_apiKey;
-		$params['appver'] = self::CLIENT_VERSION;
-		$params['pver'] = self::PROTOCOL_VERSION;
+    /**
+     * @param string $method
+     * @param array $params
+     * @return string
+     */
+    private function _createUrl($method, array $params = array())
+    {
+        $params['client'] = 'api';
+        $params['apikey'] = $this->_apiKey;
+        $params['appver'] = self::CLIENT_VERSION;
+        $params['pver'] = self::PROTOCOL_VERSION;
 
         return self::BASE_URL . $method . '?' . http_build_query($params);
-	}
+    }
 
-	/**
-	 * @param string $url
-	 * @param string $rawPostData
-	 * @return string
-	 */
-	private function _fetch($url, $rawPostData = '')
-	{
+    /**
+     * @param string $url
+     * @param string $rawPostData
+     * @return string
+     */
+    private function _fetch($url, $rawPostData = '')
+    {
         $this->_httpClient
             ->resetParameters()
             ->setMethod(Zend_Http_Client::GET)
             ->setUri($url);
 
         if (!empty($rawPostData)) {
-        	$this->_httpClient
+            $this->_httpClient
                 ->setRawData($rawPostData)
                 ->setMethod(Zend_Http_Client::POST);
         }
 
         $response = $this->_httpClient->request();
         if (!$response->isSuccessful()) {
-        	echo "----[ REQUEST ]----\n";
-        	echo $this->_httpClient->getLastRequest();
-        	echo "----[ RESPONSE ]----\n";
+            echo "----[ REQUEST ]----\n";
+            echo $this->_httpClient->getLastRequest();
+            echo "----[ RESPONSE ]----\n";
             echo $response->getHeadersAsString();
             throw new Google_Exception('Error while reading from google!');
         }
 
         return $response->getBody();
-	}
+    }
 
-	/**
-	 * @param string $apiKey
-	 */
-	public function __construct($apiKey)
-	{
+    /**
+     * @param string $apiKey
+     */
+    public function __construct($apiKey)
+    {
         $this->_apiKey = $apiKey;
         $this->_httpClient = new Zend_Http_Client();
-	}
+    }
 
-	/**
-	 * @param Zend_Http_Client $httpClient
-	 * @return Google_Safebrowsing_Requester
-	 */
-	public function setHttpClient(Zend_Http_Client $httpClient)
-	{
-		$this->_httpClient = $httpClient;
-		return $this;
-	}
+    /**
+     * @param Zend_Http_Client $httpClient
+     * @return Google_Safebrowsing_Requester
+     */
+    public function setHttpClient(Zend_Http_Client $httpClient)
+    {
+        $this->_httpClient = $httpClient;
+        return $this;
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getLists()
-	{
-		return $this->_fetch($this->_createUrl('list'));
-	}
+    /**
+     * @return string
+     */
+    public function getLists()
+    {
+        return $this->_fetch($this->_createUrl('list'));
+    }
 
-	/**
-	 * @param string $rawPostBody
-	 * @return string
-	 */
-	public function getDownloads($rawPostBody)
-	{
+    /**
+     * @param string $rawPostBody
+     * @return string
+     */
+    public function getDownloads($rawPostBody)
+    {
         return $this->_fetch($this->_createUrl('downloads'), $rawPostBody);
-	}
+    }
 }
