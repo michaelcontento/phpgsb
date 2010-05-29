@@ -283,7 +283,7 @@ class Google_Safebrowsing_Url
     }
 
     /**
-     *
+     * @return array
      */
     public function getLookups()
     {
