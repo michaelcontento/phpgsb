@@ -329,4 +329,18 @@ class Google_Safebrowsing_Url
 
         return $lookups;
     }
+
+    /**
+     * @return array
+     */
+    public function getLookupHashes()
+    {
+        $lookups = $this->getLookups();
+
+        foreach ($lookups as $idx => $url) {
+            $lookups[$idx] = hash('sha256', $url);
+        }
+
+        return $lookups;
+    }
 }

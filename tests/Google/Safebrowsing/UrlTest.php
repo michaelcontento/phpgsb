@@ -21,6 +21,25 @@
  */
 class Google_Safebrowsing_UrlTest extends PHPUnit_Framework_TestCase
 {
+    public function testGetLookupHashes()
+    {
+        $expects = array(
+            hash('sha256', 'host/1/2/3/4/5/6/?param=1'),
+            hash('sha256', 'host/1/2/3/4/5/6/'),
+            hash('sha256', 'host/3/4/5/6/?param=1'),
+            hash('sha256', 'host/3/4/5/6/'),
+            hash('sha256', 'host/4/5/6/?param=1'),
+            hash('sha256', 'host/4/5/6/'),
+            hash('sha256', 'host/5/6/?param=1'),
+            hash('sha256', 'host/5/6/'),
+            hash('sha256', 'host/6/?param=1'),
+            hash('sha256', 'host/6/'),
+            hash('sha256', 'host/')
+        );
+        $url = new Google_Safebrowsing_Url('host/1/2/3/4/5/6?param=1');
+        $this->assertEquals($expects, $url->getLookupHashes());
+    }
+
     public function testPathComponentLookupsWithQuery()
     {
         $expects = array(
