@@ -287,6 +287,7 @@ class Google_Safebrowsing_Url
      */
     public function getLookups()
     {
+        // split the host into the last 5 components without the tld
         $hostComponents = array();
         preg_match(
             '#([^.]*\.?([^.]*\.?([^.]*\.?([^.]+\.[^.]+))))$#i',
@@ -295,6 +296,7 @@ class Google_Safebrowsing_Url
         );
         $hostComponents[0] = $this->_splittedUrl['host'];
 
+        // split the path into the last 4 components
         $pathComponents = array();
         preg_match(
             '#(/[^/]*(/[^/]*(/[^/]*(/[^/]*/[^/]*))))$#',
@@ -303,11 +305,13 @@ class Google_Safebrowsing_Url
         );
         $pathComponents[0] = $this->_splittedUrl['path'];
 
+        // prepare the query var
         $query = '';
         if (isset($this->_splittedUrl['query'])) {
             $query = '?' . $this->_splittedUrl['query'];
         }
 
+        // merge everything together
         $lookups = array();
         foreach ($hostComponents as $host) {
             foreach ($pathComponents as $path) {
