@@ -19,7 +19,7 @@
 /**
  * @author Michael Contento <michael.contento@gmail.com>
  */
-class Google_Safebrowsing_RequesterTest extends PHPUnit_Framework_TestCase
+class Google_Safebrowsing_ApiTest extends PHPUnit_Framework_TestCase
 {
 	/**
 	 * @var Zend_Http_Client_Adapter_Test
@@ -27,9 +27,9 @@ class Google_Safebrowsing_RequesterTest extends PHPUnit_Framework_TestCase
 	private $_httpAdapter;
 
 	/**
-     * @var Google_Safebrowsing_Requester
+     * @var Google_Safebrowsing_Api
 	 */
-	private $_requester;
+	private $_api;
 
 	public function setUp()
 	{
@@ -38,8 +38,8 @@ class Google_Safebrowsing_RequesterTest extends PHPUnit_Framework_TestCase
         $client = new Zend_Http_Client();
         $client->setAdapter($this->_httpAdapter);
 
-        $this->_requester = new Google_Safebrowsing_Requester('[APIKEY]');
-        $this->_requester->setHttpClient($client);
+        $this->_api = new Google_Safebrowsing_Api('[APIKEY]');
+        $this->_api->setHttpClient($client);
 	}
 
     public function testGetLists()
@@ -50,27 +50,6 @@ class Google_Safebrowsing_RequesterTest extends PHPUnit_Framework_TestCase
             . "\r\n"
             . $expected
     	);
-    	$this->assertEquals($expected, $this->_requester->getLists());
-    }
-
-    public function testDownload()
-    {
-
-    }
-
-    public function test_LIVE_TEST_REMOVE_ME_LATER()
-    {
-    	$goog = new Google_Safebrowsing_Requester('ABQIAAAAqkWYEbo3LIYtxwQNWk0RbhTm4_7vVQOTE_iGsfoCNq06amSRbA');
-    	//print_r($goog->getListData(array('goog-malware-shavar', 'goog-regtest-shavar')));
-    	print_r(
-    	   $goog->getListData(
-    	        array(
-                    'goog-malware-shavar' => array(
-                        's' => '32641,32801,32641,32801',
-                        'a' => '20601,20641,20721,20801,20961,20601,20641,20721,20801,20961',
-                    )
-                )
-            )
-        );
+    	$this->assertEquals($expected, $this->_api->getLists());
     }
 }

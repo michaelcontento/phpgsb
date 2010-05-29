@@ -114,7 +114,7 @@ class Google_Safebrowsing_Api
 	/**
 	 * @return string
 	 */
-	public function getList()
+	public function getLists()
 	{
 		return $this->_fetch($this->_createUrl('list'));
 	}
