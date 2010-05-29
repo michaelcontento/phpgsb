@@ -117,8 +117,6 @@ class Google_Safebrowsing_Url
         	$this->_splittedUrl['host'] = rtrim($this->_splittedUrl['path'], '/');
         	$this->_splittedUrl['path'] = '/';
         }
-
-        var_dump($this->_splittedUrl);
     }
 
     /**
@@ -242,46 +240,30 @@ class Google_Safebrowsing_Url
 	 */
 	private function _parse()
 	{
-		echo "--[ PARSE ]--\n";
 		$this->_canonicalizedUrl = $this->_orginUrl;
-        echo "original: $this->_canonicalizedUrl\n";
 
         // Global
         $this->_removeLeadingAndTrailingSpaces();
-        echo "_removeLeadingAndTrailingSpaces: $this->_canonicalizedUrl\n";
         $this->_removeTabCrAndLf();
-        echo "_removeTabCrAndLf: $this->_canonicalizedUrl\n";
         $this->_repeatedlyDecode();
-        echo "_repeatedlyDecode: $this->_canonicalizedUrl\n";
         $this->_lowercase();
-        echo "_lowercase: $this->_canonicalizedUrl\n";
 
         // Split the url into parts for further processing
         $this->_splitUrlIntoParts();
 
         // Canonicalize host
-        echo "\norignalHost: " . $this->_splittedUrl['host'] . "\n";
         $this->_hostRemoveLeadingAndTrailingDots();
-        echo "_hostRemoveLeadingAndTrailingDots: " . $this->_splittedUrl['host'] . "\n";
         $this->_hostReplaceConsecutiveDots();
-        echo "_hostReplaceConsecutiveDots: " . $this->_splittedUrl['host'] . "\n";
         $this->_hostNormalizeIpAddress();
-        echo "_hostNormalizeIpAddress: " . $this->_splittedUrl['host'] . "\n";
 
         // Canonicalze path
-        echo "\norignalPath: " . $this->_splittedUrl['path'] . "\n";
         $this->_pathNormalizeDotPaths();
-        echo "_pathNormalizeDotPaths: " . $this->_splittedUrl['path'] . "\n";
         $this->_pathReplaceConsecutiveSlashes();
-        echo "_pathReplaceConsecutiveSlashes: " . $this->_splittedUrl['path'] . "\n";
         $this->_pathTrailingSlashes();
-        echo "_pathTrailingSlashes: " . $this->_splittedUrl['path'] . "\n";
 
         // Finally we ecape everything and merge everything
-        echo "\n";
         $this->_percentEscape();
         $this->_mergeUrlParts();
-        echo "_percentEscape + _mergeUrlParts: $this->_canonicalizedUrl\n";
         $this->_splitUrlIntoParts();
 	}
 
