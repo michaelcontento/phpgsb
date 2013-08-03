@@ -1,7 +1,7 @@
 PHP Google Safe Browsing
 ========================
 
-**phpgsb** is the PHP implementation of the [Goolge Safe Browsing](http://code.google.com/apis/safebrowsing/) (GSB) API.
+**phpgsb** is the PHP implementation of the [Google Safe Browsing](http://code.google.com/apis/safebrowsing/) (GSB) API.
 
 The implementation is not 100% feature complete and some special URIs are not processed (see the todo section). 
 But this implementation is working and can be used to extend and / or play with the Google Safe Browsing API :)
